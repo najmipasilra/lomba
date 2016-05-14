@@ -1,1 +1,2 @@
 # lomba
+#langkah awal
