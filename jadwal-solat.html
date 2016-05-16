@@ -35,7 +35,7 @@
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="#">Home</a></li>
-                    <li><a href="#">About</a></li>
+                    <li><a href="jadwal-solat.html">About</a></li>
                     <li><a href="#">Projects</a></li>
                     <li><a href="#">Contact</a></li>
                 </ul>
@@ -52,12 +52,45 @@
                 <p><a href="#">Link</a></p>
                 <p><a href="#">Link</a></p>
             </div>
-            <div class="col-sm-8 text-left">
-                <h1>Welcome</h1>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                <hr>
-                <h3>Test</h3>
-                <p>Lorem ipsum...</p>
+             <?php 
+                include_once('include.php');
+                $data = new Jadwal_Solat();
+            ?>
+            <div class="col-sm-8">
+                <table class="table table-stripped">
+                    <thead>
+                        <tr>
+                            <td>No</td>
+                            <td>Tanggal</td>
+                            <td>Imsak</td>
+                            <td>Subuh</td>
+                            <td>Zuhur</td>
+                            <td>Asar</td>
+                            <td>Magrib</td>
+                            <td>Isya</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php 
+                            $i = 0;
+                                WHILE ($d = $data::Baca()) {
+                            ?>
+                            <tr>
+                                <td><?php echo ++$i; ?></td>
+                                <td><?php echo $d['tgl'] ?></td>
+                                <td><?php echo $d['i'] ?></td>
+                                <td><?php echo $d['s'] ?></td>
+                                <td><?php echo $d['z'] ?></td>
+                                <td><?php echo $d['a'] ?></td>
+                                <td><?php echo $d['m'] ?></td>
+                                <td><?php echo $d['y'] ?></td>
+                            </tr>
+
+                            <?php 
+                                }
+                            ?>
+                    </tbody>
+                </table>
             </div>
             <div class="col-sm-2 sidenav">
                 <div class="well">
