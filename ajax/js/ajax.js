@@ -5,6 +5,11 @@
 // S, struktur HTML [function(e){ e.judul; e.waktu,.. dsb. return <string>}]
 // M, metode [string POST / GET], default : GET
 var 
+state = (function(e, url){
+    // MAGIS MAGIS, mengganti URL TANPA RELOADING, tapi membuat history semakin banyak..
+    // lol. Silahkan menikmati~
+    window.history.pushState(e, document.title, url);
+}),
 async = (function(U, Berhasil, Error){
     var request = x.ajax( {
         // alamat URL data
@@ -66,7 +71,9 @@ halaman = ({
 
     // Halaman Muka
     muka    : (function(a){ // jalurAktif : 1
-        this.method(a, '_bagian/_homepage.html', 1);
+        this.method(a, '_bagian/_homepage.html', 1, function(){
+            state('Homepage', '?index.php');
+        });
     }),
 
     // Halaman Jadwal Solat
@@ -84,6 +91,7 @@ halaman = ({
                 +           '<td>' + e.waktu.y + '</td>'
                 +      '</tr>';
             });
+            state('Homepage', '?jadwal_solat.php');
         })
     }),
 
@@ -92,22 +100,28 @@ halaman = ({
         this.method(a, '_bagian/_tips.html', 3, function(){
             var halaman = 0
             ,   data = (function(halaman){
-                komponen.tips(a.find('[ajax="tips"]'), { 'hal' : halaman } ,function(e,i){
-                    return '<div class="col-lg-12 text-center">'
-                    +           '<img class="img-responsive img-border img-full" src="' + e.isi.foto + '" alt="">'
-                    +           '<h2>' + e.isi.judul + '<br><small>' + e.tanggal + '</small></h2>'
-                    +           '<p>' + e.isi.post + '</p>'
-                    +           '<a href="#" class="btn btn-default btn-lg">Read More</a>'
-                    +           '<hr>'
-                    +       '</div>';
+                    komponen.tips(a.find('[ajax="tips"]'), { 'hal' : halaman } ,function(e,i){
+                        return '<div class="col-lg-12 text-center">'
+                        +           '<img class="img-responsive img-border img-full" src="' + e.isi.foto + '" alt="">'
+                        +           '<h2>' + e.isi.judul + '<br><small>' + e.tanggal + '</small></h2>'
+                        +           '<p>' + e.isi.post + '</p>'
+                        +           '<a href="#" class="btn btn-default btn-lg">Read More</a>'
+                        +           '<hr>'
+                        +       '</div>';
                     })
-            });
+                });
+            state('Homepage', '?tips.php');
             data(halaman);
             x('[trigger="more"]').off('click').on('click', function(){
                 data(++halaman);
                 return false;
             })
         })
+    }),
+    kontak  : (function(a){
+        this.method(a, '_bagian/_kontak.html', 4, function(){
+            state('Homepage', '?kontak.php');
+        });
     })
 }),
 komponen = ({
@@ -181,6 +195,13 @@ x(function(){
     x('[trigger="tips"]').on('click', function(e){
         // eksekusi fungsi Posting();
         halaman.tips(x('[ajax="page"]'));
+        // Larangan untuk menjalankan perintah dalam fungsi ini lebih dari 1 kali
+        e.preventDefault();
+        return false;
+    });
+    x('[trigger="kontak"]').on('click', function(e){
+        // eksekusi fungsi Posting();
+        halaman.kontak(x('[ajax="page"]'));
         // Larangan untuk menjalankan perintah dalam fungsi ini lebih dari 1 kali
         e.preventDefault();
         return false;
